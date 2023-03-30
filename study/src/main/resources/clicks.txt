@@ -1,0 +1,7 @@
+zhangsan,www,2000
+lisi,aaaaa,3000
+wangwu,bbbbbb,9000
+wangwu,bbbbbb,100000
+lisi,aaaaa,10000
+lisi,bbbbbb,10000
+zhangsan,aaaaa,12000

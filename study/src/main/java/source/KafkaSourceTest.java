@@ -35,6 +35,7 @@ public class KafkaSourceTest {
 
         FlinkKafkaConsumer<String> stringFlinkKafkaConsumer =
                 new FlinkKafkaConsumer<String>("realdata", new MyDeserializationSchema(), prop);
+
         //自动提交 offset
         stringFlinkKafkaConsumer.setCommitOffsetsOnCheckpoints(true);
 

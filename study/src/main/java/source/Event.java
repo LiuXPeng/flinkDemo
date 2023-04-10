@@ -1,6 +1,9 @@
 package source;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 /**
  * @version 1.0.0
@@ -12,6 +15,9 @@ import java.sql.Timestamp;
 
 
 public class Event {
+    private static List<String> users = Arrays.asList("aaa", "bbb", "ccc", "dddd", "eeee", "fffff");
+    private static List<String> urls = Arrays.asList("www.baidu.com", "www.tencent.com", "www.xiaomi.ocm", "www.bytedace.com");
+
     private String user;
     private String url;
     private Long timestamp;
@@ -56,5 +62,14 @@ public class Event {
 
     public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public static Event getRandom() {
+        Random random = new Random();
+        Event event = new Event();
+        event.setUrl(urls.get(random.nextInt(urls.size())));
+        event.setUser(users.get(random.nextInt(users.size())));
+        event.setTimestamp(System.currentTimeMillis());
+        return event;
     }
 }

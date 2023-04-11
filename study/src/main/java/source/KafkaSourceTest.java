@@ -34,7 +34,7 @@ public class KafkaSourceTest {
         prop.setProperty("auto.offset.reset", "latest");
 
         FlinkKafkaConsumer<String> stringFlinkKafkaConsumer =
-                new FlinkKafkaConsumer<String>("realdata", new MyDeserializationSchema(), prop);
+                new FlinkKafkaConsumer<String>("realdata", new MyKafkDeserializationSchema(), prop);
 
         //自动提交 offset
         stringFlinkKafkaConsumer.setCommitOffsetsOnCheckpoints(true);

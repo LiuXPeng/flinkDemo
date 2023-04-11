@@ -10,6 +10,7 @@ import org.apache.flink.api.common.serialization.DeserializationSchema;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pojo.CollectionDoubleData;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -69,11 +70,15 @@ class MyDeserializationSchema implements DeserializationSchema<String>, Serializ
 
     @Override
     public String deserialize(byte[] bytes) throws IOException {
-        DatumReader<GenericRecord> reader = new GenericDatumReader<GenericRecord>(new Schema.Parser().parse(collectionDoubleData));
-        Decoder decoder = DecoderFactory.get().binaryDecoder(bytes, null);
-        GenericRecord result = reader.read(null, decoder);
-        log.info(result.get("attributeCode").toString());
-        return  result.get("attributeCode").toString();
+//        DatumReader<GenericRecord> reader = new GenericDatumReader<GenericRecord>(new Schema.Parser().parse(collectionDoubleData));
+//        Decoder decoder = DecoderFactory.get().binaryDecoder(bytes, null);
+//        GenericRecord result = reader.read(null, decoder);
+//        log.info(result.get("attributeCode").toString());
+        CollectionDoubleData collectionDoubleData = CollectionDoubleData.getBySchema(bytes);
+        if (collectionDoubleData != null) {
+            return collectionDoubleData.toString();
+        }
+        return  "attributeCode";
 //        return new String(bytes);
     }
 

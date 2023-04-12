@@ -45,7 +45,6 @@ public class WindowTest {
                 .keyBy(data -> data.f0)
                 .window(SlidingEventTimeWindows.of(Time.minutes(1), Time.seconds(5)))
                 .reduce(new ReduceFunction<Tuple2<String, Long>>() {
-
                     @Override
                     public Tuple2<String, Long> reduce(Tuple2<String, Long> value1, Tuple2<String, Long> value2) throws Exception {
                         return Tuple2.of(value1.f0, value1.f1 + value2.f1);

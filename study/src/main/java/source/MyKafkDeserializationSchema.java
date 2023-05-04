@@ -31,7 +31,9 @@ public class MyKafkDeserializationSchema implements KafkaDeserializationSchema<S
     public String deserialize(ConsumerRecord<byte[], byte[]> record) throws Exception {
         String key =new String(record.key());
         log.warn("key:{}", key);
-
+        if (!"xiaowangtiaoshi0".equals(key)) {
+            return "not right key:" + key;
+        }
         return CollectionDoubleData.getBySchema(record.value()).getAttributeCode();
     }
 

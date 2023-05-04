@@ -85,42 +85,43 @@ public class CollectionDoubleData {
         this.unit = unit;
     }
 
-    public static final String s = "{\n" +
-            "    \"name\":\"collectionDoubleData\",\n" +
-            "    \"type\":\"record\",\n" +
-            "    \"fields\":[\n" +
-            "        {\n" +
-            "            \"name\":\"devTypeID\",\n" +
-            "            \"type\":\"string\"\n" +
-            "        },\n" +
-            "        {\n" +
-            "            \"name\":\"devID\",\n" +
-            "            \"type\":\"string\"\n" +
-            "        },\n" +
-            "        {\n" +
-            "            \"name\":\"attributeCode\",\n" +
-            "            \"type\":\"string\"\n" +
-            "        },\n" +
-            "        {\n" +
-            "            \"name\":\"origin\",\n" +
-            "            \"type\":\"long\",\n" +
-            "            \"logicalType\":\"timestamp-millis\"\n" +
-            "        },\n" +
-            "        {\n" +
-            "            \"name\":\"quality\",\n" +
-            "            \"type\":\"string\"\n" +
-            "        },\n" +
-            "        {\n" +
-            "            \"name\":\"doubleData\",\n" +
-            "            \"type\":\"double\"\n" +
-            "        },\n" +
-            "        {\n" +
-            "            \"name\":\"unit\",\n" +
-            "            \"type\":\"string\"\n" +
-            "        }\n" +
-            "    ]\n" +
-            "    \n" +
-            "}";
+    public static final String s =" {" +
+            "        \"type\": \"record\"," +
+            "        \"name\": \"collectionIntegerData\"," +
+            "        \"fields\": [" +
+            "          {" +
+            "            \"name\": \"devTypeID\",\n" +
+            "            \"type\": \"string\"\n" +
+            "          }," +
+            "          {" +
+            "            \"name\": \"devID\"," +
+            "            \"type\": \"string\"" +
+            "          }," +
+            "          {" +
+            "            \"name\": \"attributeCode\"," +
+            "            \"type\": \"string\"\n" +
+            "          }," +
+            "          {" +
+            "            \"name\": \"origin\"," +
+            "            \"type\": {" +
+            "              \"type\": \"long\"," +
+            "              \"logicalType\": \"timestamp-millis\"" +
+            "            }" +
+            "          }," +
+            "          {" +
+            "            \"name\": \"quality\"," +
+            "            \"type\": \"string\"" +
+            "          }," +
+            "          {" +
+            "            \"name\": \"integerData\"," +
+            "            \"type\": \"int\"" +
+            "          }," +
+            "          {" +
+            "            \"name\": \"unit\"," +
+            "            \"type\": \"string\"" +
+            "          }" +
+            "        ]" +
+            "      }".trim();
 
     public static CollectionDoubleData getBySchema(byte[] bytes) {
         try {
@@ -133,7 +134,7 @@ public class CollectionDoubleData {
             collectionDoubleData.setAttributeCode(result.get("attributeCode").toString());
             collectionDoubleData.setOrigin(Long.valueOf( result.get("origin").toString()));
             collectionDoubleData.setQuality(result.get("quality").toString());
-            collectionDoubleData.setDoubleData(Double.valueOf(result.get("doubleData").toString()));
+//            collectionDoubleData.setDoubleData(Double.valueOf(result.get("doubleData").toString()));
             collectionDoubleData.setUnit(result.get("unit").toString());
             return collectionDoubleData;
         } catch (Exception e) {

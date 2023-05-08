@@ -85,15 +85,23 @@ public class Hdfs2Doris {
         dorisBuilder.setFenodes("192.168.1.8:8030")
                 .setTableIdentifier("default_cluster:asd.test")
                 .setUsername("root")
-                .setPassword("");
+                .setPassword("")
+
+        ;
 
         // json format to streamload
         Properties properties = new Properties();
         properties.setProperty("format", "json");
         properties.setProperty("read_json_by_line", "true");
+        properties.setProperty("doris.batch.size", "2");
+
 //        properties.setProperty("disable_stream_load_2pc", "false");
         DorisExecutionOptions.Builder executionBuilder = DorisExecutionOptions.builder();
-        executionBuilder.setLabelPrefix("label-dorixx") //streamload label prefix
+        executionBuilder
+//                .setCheckInterval(1000)
+//                .setBufferCount(2)
+                .disable2PC()
+                .setLabelPrefix("label-dorixx") //streamload label prefix
                 .setStreamLoadProp(properties); //streamload params
 
         //flink rowdata‘s schema
@@ -111,6 +119,7 @@ public class Hdfs2Doris {
                 DataTypes.INT(), DataTypes.VARCHAR(255)};
 
         builder
+
                 .setDorisReadOptions(DorisReadOptions.builder().build())
                 .setDorisExecutionOptions(executionBuilder.build())
                 .setSerializer(RowDataSerializer.builder()    //serialize according to rowdata
@@ -118,7 +127,8 @@ public class Hdfs2Doris {
                         .setType("json")           //json format
                         .setFieldType(types)
                         .build())
-                .setDorisOptions(dorisBuilder.build());
+                .setDorisOptions(dorisBuilder.build())
+        ;
 
 
         stream.sinkTo(builder.build());

@@ -41,22 +41,22 @@ public class Hdfs2Doris {
         env.setRestartStrategy(RestartStrategies.fixedDelayRestart(3, 2000));
         env.enableCheckpointing(10000);
         env.getCheckpointConfig().enableExternalizedCheckpoints(CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
-        env.setParallelism(1);
+//        env.setParallelism(1);
         String hdfs = "hdfs://192.168.1.21:9000/cassandraData/data_store_collectiondoubledata.csv";
-//        DataStreamSource<String> source = env.readTextFile(hdfs);
-        DataStreamSource<String> source1 = env.fromElements("d4e2ee90da2f919badbcc8077e1a9e4d,043a10be68438f8b451febedbe7583fa,UA,2022-09-15 04:43:14.377,21534,ea5d2f876123417593b8714091206eb2,0,1663216994377,1,0,1",
-                "4e2ee90da2f919badbcc8077e1a9e4d,043a10be68438f8b451febedbe7583fa,UA,2022-09-15 04:43:15.818,21537,27b918863ba44c7895714cd7f6c148d5,0,1663216995818,1,0,1",
-                "d4e2ee90da2f919badbcc8077e1a9e4d,043a10be68438f8b451febedbe7583fa,UA,2022-09-15 04:43:17.270,21540,1283b877b2fe43179a7b16bb211de04b,0,1663216997270,1,0,1",
-                "d4e2ee90da2f919badbcc8077e1a9e4d,043a10be68438f8b451febedbe7583fa,UA,2022-09-15 04:43:18.728,21542,0d155cdc53284e38b19dfbea83699436,0,1663216998728,1,0,1",
-                "d4e2ee90da2f919badbcc8077e1a9e4d,043a10be68438f8b451febedbe7583fa,UA,2022-09-15 04:43:20.181,21545,4a7c5034579c406fb285a0f1aa9c7922,0,1663217000181,1,0,1",
-                "d4e2ee90da2f919badbcc8077e1a9e4d,043a10be68438f8b451febedbe7583fa,UA,2022-09-15 04:43:21.618,21548,e0432b83bd5441f09c7c62b33055ea67,0,1663217001618,1,0,1",
-                "d4e2ee90da2f919badbcc8077e1a9e4d,043a10be68438f8b451febedbe7583fa,UA,2022-09-15 04:43:23.072,21550,1f12229e7f77423f8fab3c89b2f52244,0,1663217003072,1,0,1");
+        DataStreamSource<String> source = env.readTextFile(hdfs);
+//        DataStreamSource<String> source1 = env.fromElements("d4e2ee90da2f919badbcc8077e1a9e4d,043a10be68438f8b451febedbe7583fa,UA,2022-09-15 04:43:14.377,21534,ea5d2f876123417593b8714091206eb2,0,1663216994377,1,0,1",
+//                "4e2ee90da2f919badbcc8077e1a9e4d,043a10be68438f8b451febedbe7583fa,UA,2022-09-15 04:43:15.818,21537,27b918863ba44c7895714cd7f6c148d5,0,1663216995818,1,0,1",
+//                "d4e2ee90da2f919badbcc8077e1a9e4d,043a10be68438f8b451febedbe7583fa,UA,2022-09-15 04:43:17.270,21540,1283b877b2fe43179a7b16bb211de04b,0,1663216997270,1,0,1",
+//                "d4e2ee90da2f919badbcc8077e1a9e4d,043a10be68438f8b451febedbe7583fa,UA,2022-09-15 04:43:18.728,21542,0d155cdc53284e38b19dfbea83699436,0,1663216998728,1,0,1",
+//                "d4e2ee90da2f919badbcc8077e1a9e4d,043a10be68438f8b451febedbe7583fa,UA,2022-09-15 04:43:20.181,21545,4a7c5034579c406fb285a0f1aa9c7922,0,1663217000181,1,0,1",
+//                "d4e2ee90da2f919badbcc8077e1a9e4d,043a10be68438f8b451febedbe7583fa,UA,2022-09-15 04:43:21.618,21548,e0432b83bd5441f09c7c62b33055ea67,0,1663217001618,1,0,1",
+//                "d4e2ee90da2f919badbcc8077e1a9e4d,043a10be68438f8b451febedbe7583fa,UA,2022-09-15 04:43:23.072,21550,1f12229e7f77423f8fab3c89b2f52244,0,1663217003072,1,0,1");
 
 //        source1.print();
 
         DateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss.sss");
 
-        SingleOutputStreamOperator<RowData> stream = source1.map(new MapFunction<String, RowData>() {
+        SingleOutputStreamOperator<RowData> stream = source.map(new MapFunction<String, RowData>() {
             @Override
             public RowData map(String s) throws Exception {
                 String[] splits = s.split(",");
@@ -132,7 +132,7 @@ public class Hdfs2Doris {
 
 
         stream.sinkTo(builder.build());
-        stream.print();
+//        stream.print();
         env.execute();
 
     }

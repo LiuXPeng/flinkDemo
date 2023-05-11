@@ -19,9 +19,9 @@ import org.apache.flink.table.data.StringData;
 import org.apache.flink.table.data.TimestampData;
 import org.apache.flink.table.types.DataType;
 
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 
 
@@ -44,7 +44,7 @@ public class Hdfs2Doris {
 //        env.setParallelism(1);
         String hdfs = "hdfs://192.168.1.21:9000/cassandraData/data_store_collectiondoubledata.csv";
         DataStreamSource<String> source = env.readTextFile(hdfs);
-//        DataStreamSource<String> source1 = env.fromElements("d4e2ee90da2f919badbcc8077e1a9e4d,043a10be68438f8b451febedbe7583fa,UA,2022-09-15 04:43:14.377,21534,ea5d2f876123417593b8714091206eb2,0,1663216994377,1,0,1",
+//        DataStreamSource<String> source = env.fromElements("d4e2ee90da2f919badbcc8077e1a9e4d,043a10be68438f8b451febedbe7583fa,UA,2022-09-15 04:43:14.377,21534,ea5d2f876123417593b8714091206eb2,0,1663216994377,1,0,1",
 //                "4e2ee90da2f919badbcc8077e1a9e4d,043a10be68438f8b451febedbe7583fa,UA,2022-09-15 04:43:15.818,21537,27b918863ba44c7895714cd7f6c148d5,0,1663216995818,1,0,1",
 //                "d4e2ee90da2f919badbcc8077e1a9e4d,043a10be68438f8b451febedbe7583fa,UA,2022-09-15 04:43:17.270,21540,1283b877b2fe43179a7b16bb211de04b,0,1663216997270,1,0,1",
 //                "d4e2ee90da2f919badbcc8077e1a9e4d,043a10be68438f8b451febedbe7583fa,UA,2022-09-15 04:43:18.728,21542,0d155cdc53284e38b19dfbea83699436,0,1663216998728,1,0,1",
@@ -60,26 +60,30 @@ public class Hdfs2Doris {
             @Override
             public RowData map(String s) throws Exception {
                 String[] splits = s.split(",");
-                GenericRowData genericRowData = new GenericRowData(11);
+                GenericRowData genericRowData = new GenericRowData(12);
 //                Timestamp timestamp = new Timestamp(format.parse(splits[3]).getTime());
                 TimestampData timestamp = TimestampData.fromEpochMillis(format.parse(splits[3]).getTime());
+//                Date date = new Date(timestamp.getMillisecond());
+                Integer res = Math.toIntExact(timestamp.getMillisecond() / (1000 * 3600 * 24));
+
                 genericRowData.setField(0, timestamp);
-                genericRowData.setField(1, StringData.fromString(splits[0]) );
-                genericRowData.setField(2, StringData.fromString(splits[1]));
-                genericRowData.setField(3, StringData.fromString(splits[2]));
-                genericRowData.setField(4, Double.valueOf(splits[4]));
-                genericRowData.setField(5, StringData.fromString(splits[5]));
-                genericRowData.setField(6, Integer.valueOf(splits[6]));
-                genericRowData.setField(7, Long.valueOf(splits[7]));
-                genericRowData.setField(8, StringData.fromString(splits[8]));
-                genericRowData.setField(9, Integer.valueOf(splits[9]));
-                genericRowData.setField(10, StringData.fromString(splits[10]));
+                genericRowData.setField(1, res);
+                genericRowData.setField(2, StringData.fromString(splits[0]));
+                genericRowData.setField(3, StringData.fromString(splits[1]));
+                genericRowData.setField(4, StringData.fromString(splits[2]));
+                genericRowData.setField(5, Double.valueOf(splits[4]));
+                genericRowData.setField(6, StringData.fromString(splits[5]));
+                genericRowData.setField(7, Integer.valueOf(splits[6]));
+                genericRowData.setField(8, Long.valueOf(splits[7]));
+                genericRowData.setField(9, StringData.fromString(splits[8]));
+                genericRowData.setField(10, Integer.valueOf(splits[9]));
+                genericRowData.setField(11, StringData.fromString(splits[10]));
 
                 return genericRowData;
             }
         });
 
-      //doris sink option
+        //doris sink option
         DorisSink.Builder<RowData> builder = DorisSink.builder();
         DorisOptions.Builder dorisBuilder = DorisOptions.builder();
         dorisBuilder.setFenodes("192.168.1.8:8030")
@@ -106,15 +110,15 @@ public class Hdfs2Doris {
 
         //flink rowdata‘s schema
         String[] fields = {
-                "createtime",
+                "createtime", "createdate",
                 "devtypeid", "devid",
                 "attributecode", "doubledata", "id",
                 "isdelete", "origin", "quality",
                 "recordtype", "unit"};
         DataType[] types = {
-                DataTypes.TIMESTAMP(),
-                DataTypes.VARCHAR(255),DataTypes.VARCHAR(255),
-                DataTypes.VARCHAR(255), DataTypes.DOUBLE(),DataTypes.VARCHAR(255),
+                DataTypes.TIMESTAMP(), DataTypes.DATE(),
+                DataTypes.VARCHAR(255), DataTypes.VARCHAR(255),
+                DataTypes.VARCHAR(255), DataTypes.DOUBLE(), DataTypes.VARCHAR(255),
                 DataTypes.INT(), DataTypes.BIGINT(), DataTypes.VARCHAR(255),
                 DataTypes.INT(), DataTypes.VARCHAR(255)};
 

@@ -19,6 +19,7 @@ import org.apache.flink.table.data.StringData;
 import org.apache.flink.table.data.TimestampData;
 import org.apache.flink.table.types.DataType;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -54,7 +55,7 @@ public class Hdfs2Doris {
 
 //        source1.print();
 
-        DateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss.sss");
+//        DateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss.sss");
 
         SingleOutputStreamOperator<RowData> stream = source.map(new MapFunction<String, RowData>() {
             @Override
@@ -62,7 +63,7 @@ public class Hdfs2Doris {
                 String[] splits = s.split(",");
                 GenericRowData genericRowData = new GenericRowData(12);
 //                Timestamp timestamp = new Timestamp(format.parse(splits[3]).getTime());
-                TimestampData timestamp = TimestampData.fromEpochMillis(format.parse(splits[3]).getTime());
+                TimestampData timestamp = TimestampData.fromEpochMillis(System.currentTimeMillis() +(3600 * 1000 * 8));
 //                Date date = new Date(timestamp.getMillisecond());
                 Integer res = Math.toIntExact(timestamp.getMillisecond() / (1000 * 3600 * 24));
 
@@ -87,7 +88,7 @@ public class Hdfs2Doris {
         DorisSink.Builder<RowData> builder = DorisSink.builder();
         DorisOptions.Builder dorisBuilder = DorisOptions.builder();
         dorisBuilder.setFenodes("192.168.1.8:8030")
-                .setTableIdentifier("default_cluster:asd.test")
+                .setTableIdentifier("default_cluster:asd.test_2")
                 .setUsername("root")
                 .setPassword("")
 
